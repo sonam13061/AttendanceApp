@@ -86,14 +86,18 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
 
                             //Log.d(TAG, "signInWithEmail:success");
+                            if(mAuth.getCurrentUser().isEmailVerified()) {
+                                FirebaseUser user = mAuth.getCurrentUser();
 
-                            FirebaseUser user = mAuth.getCurrentUser();
+                                Toast.makeText(LoginActivity.this, "Welcome : " + user.getEmail(), Toast.LENGTH_SHORT).show();
 
-                            Toast.makeText(LoginActivity.this, "Welcome : "+user.getEmail(), Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
 
-                            Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
-
-                            startActivity(intent);
+                                startActivity(intent);
+                            }
+                            else{
+                                Toast.makeText(LoginActivity.this, "Please verify your email", Toast.LENGTH_SHORT).show();
+                            }
 
                         } else {
 

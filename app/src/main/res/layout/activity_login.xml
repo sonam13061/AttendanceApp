@@ -16,7 +16,7 @@
         android:text="LOGIN HERE"
 
         android:textSize="24sp"
-        android:background="#8C9EFF"/>
+       android:textStyle="italic"/>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,28 +31,52 @@
             android:orientation="vertical">
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+
+                android:background="@drawable/background">
+
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Email Address"
+                    android:paddingTop="5dp"
+                    android:background="@android:color/transparent"
                     android:id="@+id/email"
                     android:inputType="textEmailAddress"
-                    android:textAlignment="center"/>
+
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="2dp"
+
+                android:background="@drawable/background">
+
+
+
+
+
+            <EditText
+                android:layout_width="270dp"
+
+                android:layout_height="wrap_content"
                 android:hint="Password"
+
+                android:background="@android:color/transparent"
                 android:id="@+id/pass"
                 android:inputType="textPassword"
-                android:textAlignment="center"/>
 
-        </com.google.android.material.textfield.TextInputLayout>
+                />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
 
         </LinearLayout>
 

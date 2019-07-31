@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -65,6 +66,25 @@ public class RegisterActivity extends AppCompatActivity {
                     confirm.setError("Password doesn't match");
                     return;
                 }
+                if(!Patterns.EMAIL_ADDRESS.matcher(mail.getText().toString()).matches()){
+
+                    mail.setError("Please enter valid email");
+
+                    mail.requestFocus();
+
+                    return;
+
+                }
+
+                if(pwd.getText().toString().length()<6){
+
+                    pwd.setError("Please enter password of minimum 6 digits");
+
+                    pwd.requestFocus();
+
+                    return;
+
+                }
 
                 signup(mail.getText().toString(), pwd.getText().toString());
 
@@ -94,14 +114,8 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(RegisterActivity.this, "You have already registered", Toast.LENGTH_SHORT).show();
                     }
 
-                    else{
-                        Log.d("pass","Length too short");
-                        pwd.setError("password length cannot be less than 6 ");
-                        confirm.setError("password length cannot be less than 6 ");
-                    }
 
-                    updateuser(null);
-
+                    //updateuser(null);
 
                 } else {
 
@@ -112,13 +126,16 @@ public class RegisterActivity extends AppCompatActivity {
                             if(task.isSuccessful()){
 
                                 Toast.makeText(RegisterActivity.this, "Verification link sent to"+mail.getText(), Toast.LENGTH_SHORT).show();
+                                Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
+                                startActivity(intent);
+                                finish();
                             }
                             else{
-                                Toast.makeText(RegisterActivity.this, "Email id doesn't exist", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
-                    updateuser(user);
+                    //updateuser(user);
 
                 }
 
@@ -126,7 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    public  void updateuser(FirebaseUser user){
+    /*public  void updateuser(FirebaseUser user){
         if(user==null){
 
         }
@@ -146,7 +163,7 @@ public class RegisterActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         updateuser(currentUser);
-    }
+    }*/
 }
 
 
