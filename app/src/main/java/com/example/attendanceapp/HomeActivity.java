@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.facebook.login.LoginManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -119,6 +120,7 @@ public class HomeActivity extends AppCompatActivity
                         public void onClick(DialogInterface dialog, int which) {
                             FirebaseAuth.getInstance().signOut();
                             Intent intent=new Intent(HomeActivity.this,LoginActivity.class);
+                            LoginManager.getInstance().logOut();
                             startActivity(intent);
                             finish();
                             Toast.makeText(HomeActivity.this, "Logout Successfully", Toast.LENGTH_SHORT).show();

@@ -119,14 +119,15 @@ public class RegisterActivity extends AppCompatActivity {
 
                 } else {
 
-                    FirebaseUser user =mAuth.getCurrentUser();
+                    final FirebaseUser user =mAuth.getCurrentUser();
                     user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
 
-                                Toast.makeText(RegisterActivity.this, "Verification link sent to"+mail.getText(), Toast.LENGTH_SHORT).show();
-                                Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
+                                //Toast.makeText(RegisterActivity.this, "Verification link sent to"+mail.getText(), Toast.LENGTH_SHORT).show();
+                                Intent intent=new Intent(RegisterActivity.this,MainActivity.class);
+                                intent.putExtra("email", user.getEmail());
                                 startActivity(intent);
                                 finish();
                             }
