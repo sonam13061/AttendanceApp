@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#7A729B"
-    tools:context=".RegisterActivity">
+    tools:context=".init.RegisterActivity">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,6 +25,23 @@
                 android:padding="2dp"
                 android:background="@drawable/background">
             <EditText
+
+                android:id="@+id/name"
+                android:background="@android:color/transparent"
+                android:paddingTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Name"
+                android:textSize="20dp"
+                android:inputType="text"
+                />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:background="@drawable/background">
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email Address"
@@ -34,7 +51,22 @@
                 android:paddingTop="5dp"
                 android:inputType="textEmailAddress"
                 />
+
+
             </com.google.android.material.textfield.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background"
+                >
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+
+                    android:id="@+id/s1"
+
+                    ></Spinner>
+            </LinearLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:padding="2dp"
@@ -68,6 +100,7 @@
                 android:inputType="textPassword"
                />
             </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
     <Button

@@ -2,14 +2,22 @@ package com.example.attendanceapp;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import com.example.attendanceapp.Fragments.DashBoardFragment;
+import com.example.attendanceapp.Fragments.HomeFragment;
+import com.example.attendanceapp.Fragments.NotificationFragment;
+import com.example.attendanceapp.Fragments.OnFragmentInteractionListener;
+import com.example.attendanceapp.init.LoginActivity;
 import com.facebook.login.LoginManager;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -23,12 +31,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.Menu;
 import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +47,9 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        BottomNavigationView navView = findViewById(R.id.bott_nav_view);
+        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        setFragment(HomeFragment.newInstance("",""));
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,7 +133,7 @@ public class HomeActivity extends AppCompatActivity
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             FirebaseAuth.getInstance().signOut();
-                            Intent intent=new Intent(HomeActivity.this,LoginActivity.class);
+                            Intent intent=new Intent(HomeActivity.this, LoginActivity.class);
                             LoginManager.getInstance().logOut();
                             startActivity(intent);
                             finish();
@@ -131,8 +145,40 @@ public class HomeActivity extends AppCompatActivity
 
         }
 
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    setFragment(HomeFragment.newInstance("", ""));
+                    return true;
+                case R.id.navigation_dashboard:
+                    setFragment(DashBoardFragment.newInstance("", ""));
+
+                    return true;
+                case R.id.navigation_notifications:
+                    setFragment(NotificationFragment.newInstance("",""));
+                    return true;
+            }
+            return false;
+        }
+    };
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+    private void setFragment(Fragment fragment){
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.container,fragment);
+        transaction.commit();
     }
 }

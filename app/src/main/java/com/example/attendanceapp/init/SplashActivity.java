@@ -1,4 +1,4 @@
-package com.example.attendanceapp;
+package com.example.attendanceapp.init;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +11,8 @@ import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 
+import com.example.attendanceapp.HomeActivity;
+import com.example.attendanceapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.security.MessageDigest;
@@ -24,27 +26,28 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         mAuth = FirebaseAuth.getInstance();
+        getSupportActionBar().hide();
         hash();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (mAuth.getCurrentUser() == null) {
-                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                    Intent intent = new Intent(SplashActivity.this, selectactivity.class);
                     startActivity(intent);
                     finish();
-                } else {
-                    if(mAuth.getCurrentUser().isEmailVerified()) {
-                        Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                    else{
-                        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
+                } else if(!mAuth.getCurrentUser().isEmailVerified()) {
 
-                    }
+
+                    Intent intent = new Intent(SplashActivity.this, selectactivity.class);
+                    startActivity(intent);
+                    finish();
                 }
+                else {
+                    Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+
+                                    }
 
 
             }
