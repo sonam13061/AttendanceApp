@@ -10,8 +10,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -20,7 +18,9 @@ import android.widget.Toast;
 
 import com.example.attendanceapp.R;
 import com.example.attendanceapp.model.Student;
+import com.example.attendanceapp.model.Teacher;
 import com.example.attendanceapp.model.User;
+
 import com.example.attendanceapp.utils.Constants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,78 +34,76 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class RegisterTeacherActivity extends AppCompatActivity {
     private Button signup;
     private TextView click;
     private FirebaseAuth mAuth;
-    private Spinner spinner;
-    EditText nm, mail, pwd, confirm;
-    String name,email,pass,course,usertype;
+    public static final String MTAG="";
+
+
+    EditText nm, mail, pwd, confirm,pin;
+    String name,email,pass,usertype,key;
+    int pinn;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference(Constants.User);
-    List<String> courselist=new ArrayList<>();
-    String course_s="------Select Course-----";
 
     public void init() {
-        signup = findViewById(R.id.signup);
-        click = findViewById(R.id.click);
-        nm=findViewById(R.id.name);
-        spinner=findViewById(R.id.s1);
+        signup = findViewById(R.id.signupteacher);
+        click = findViewById(R.id.clickteacher);
+        nm=findViewById(R.id.nameteacher);
+        pin=findViewById(R.id.pin);
         prefs=getSharedPreferences("prefs", MODE_PRIVATE);
         editor=prefs.edit();
 
-        mail = findViewById(R.id.mail);
+        mail = findViewById(R.id.mailteacher);
 
-        pwd = findViewById(R.id.pw);
-        confirm = findViewById(R.id.confirm);
+        pwd = findViewById(R.id.pwteacher);
+        confirm = findViewById(R.id.confirmteacher);
         mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
-        getSupportActionBar().hide();
+        setContentView(R.layout.activity_register_teacher);
         init();
-        courselist.add("------Select Course-----");
-        final ArrayAdapter<String> adapter=new ArrayAdapter<>(RegisterActivity.this, android.R.layout.simple_list_item_1,courselist);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
-        DatabaseReference courseRef=database.getReference(Constants.COURSES);
-        courseRef.addValueEventListener(new ValueEventListener() {
+        DatabaseReference myRefs=database.getReference(Constants.PIN);
+        myRefs.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot d:dataSnapshot.getChildren()){
-                    courselist.add(String.valueOf(d.getValue()));
-                }
-                adapter.notifyDataSetChanged();
-            }
+                    key= String.valueOf(d.getValue());
 
+                }
+                System.out.println(key);
+                Log.d(MTAG ,key);
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(RegisterActivity.this, "Error in courses", Toast.LENGTH_SHORT).show();
 
             }
         });
-
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 email=mail.getText().toString();
                 name=nm.getText().toString();
                 pass=pwd.getText().toString();
-                course=spinner.getSelectedItem().toString();
-                usertype="Student";
+                pinn= Integer.parseInt(pin.getText().toString());
+                usertype="Teacher";
 
-                if(course.equals(course_s)) {
-                    Toast.makeText(RegisterActivity.this, "Please select course", Toast.LENGTH_SHORT).show();
+                if(pinn!=Integer.parseInt(key)){
+                    pin.setError("pin is wrong");
                     return;
+                }
+                if(TextUtils.isEmpty(pin.getText().toString())) {
+                    pin.setError("Email field cannot be empty ");
+                    return;
+
+
                 }
                 if (TextUtils.isEmpty(name)) {
                     mail.setError("Email field cannot be empty ");
@@ -147,33 +145,30 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     return;
 
                 }
+                signup(name,email,pass, usertype,pinn);
 
-                signup(name,email, pass,course,usertype );
+
 
 
             }
         });
-
-
         click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                Intent intent=new Intent(RegisterTeacherActivity.this,LoginTeacherActivity.class);
                 startActivity(intent);
-                finish();
-
             }
         });
-    }
 
-    public void signup(final  String name,final String email,final String password,final String course,final  String type) {
+    }
+    public void signup(final  String name, final String email , final String password,final String usertype,final int pinn) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
                     if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                         Log.d("tag","already exist");
-                        Toast.makeText(RegisterActivity.this, "You have already registered", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterTeacherActivity.this, "You have already registered", Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -188,21 +183,20 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                             if(task.isSuccessful()){
 
                                 //Toast.makeText(RegisterActivity.this, "Verification link sent to"+mail.getText(), Toast.LENGTH_SHORT).show();
-                                User s=new User(name, email, course,type);
+                                User s=new User(name, email, usertype, pinn);
                                 myRef.child(user.getUid()).setValue(s);
                                 editor.putString(Constants.NAME, name);
                                 editor.putString(Constants.EMAIL, email);
-                                editor.putString(Constants.COURSE, course);
-                                editor.putString(Constants.USERTYPE,type);
-
+                               // editor.putString(Constants, pinn);
+                                editor.putString(Constants.USERTYPE, usertype);
                                 editor.commit();
-                                Intent intent=new Intent(RegisterActivity.this,MainActivity.class);
+                                Intent intent=new Intent(RegisterTeacherActivity.this,WelcomeActivity.class);
                                 intent.putExtra("email", user.getEmail());
                                 startActivity(intent);
                                 finish();
                             }
                             else{
-                                Toast.makeText(RegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterTeacherActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -214,40 +208,4 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         });
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        if(i>0){
-            course=courselist.get(i);
-        }
-
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
-
-    /*public  void updateuser(FirebaseUser user){
-        if(user==null){
-
-        }
-        else{
-            Intent intent=new Intent(RegisterActivity.this,HomeActivity.class);
-            startActivity(intent);
-            finish();
-
-
-        }
-    }
-
-    @Override
-    protected void onStart() {
-
-        super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-
-        updateuser(currentUser);
-    }*/
 }
-
-

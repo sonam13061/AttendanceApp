@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.attendanceapp.HomeActivity;
 import com.example.attendanceapp.R;
 import com.example.attendanceapp.model.Student;
+import com.example.attendanceapp.model.User;
 import com.example.attendanceapp.utils.Constants;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -103,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
         myRef.child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Student s=dataSnapshot.getValue(Student.class);
+                User s=dataSnapshot.getValue(User.class);
                 editor.putString(Constants.NAME, s.getName());
                 editor.putString(Constants.EMAIL,s.getEmail());
                 editor.putString(Constants.COURSE, s.getCourse());
@@ -117,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
-    public void login(String email,String pass){
+    public void login(String email,String pass) {
         mAuth.signInWithEmailAndPassword(email, pass)
 
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -131,16 +132,13 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
 
                             //Log.d(TAG, "signInWithEmail:success");
-                            if(mAuth.getCurrentUser().isEmailVerified()) {
+                            if (mAuth.getCurrentUser().isEmailVerified()) {
                                 FirebaseUser user = mAuth.getCurrentUser();
+                                getuserdata(user);
+                                Authcheck();
 
                                 Toast.makeText(LoginActivity.this, "Welcome : " + user.getEmail(), Toast.LENGTH_SHORT).show();
-                                getuserdata(user);
-                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-
-                                startActivity(intent);
-                            }
-                            else{
+                            } else {
                                 Toast.makeText(LoginActivity.this, "Please verify your email", Toast.LENGTH_SHORT).show();
                             }
 
@@ -148,24 +146,48 @@ public class LoginActivity extends AppCompatActivity {
 
                             // If sign in fails, display a message to the user.
 
-                           // Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            // Log.w(TAG, "signInWithEmail:failure", task.getException());
 
                             Toast.makeText(LoginActivity.this, "Email address or password is invalid",
 
                                     Toast.LENGTH_SHORT).show();
 
 
-
                         }
+                    }
+                });
+    }
+
 
 
 
                         // ...
 
-                    }
 
-                });
-    }
+
+
+
+
+
+
+        public void Authcheck(){
+
+
+            String usertype = prefs.getString(Constants.USERTYPE, "");
+            String usertype1 = "Teacher";
+            String usertype2 = "Student";
+            if (usertype.equals(usertype2)) {
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+
+                startActivity(intent);
+
+            } else if (usertype.equals(usertype1)) {
+                FirebaseAuth.getInstance().signOut();
+                Toast.makeText(this, "Please login through Teacher portal", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
 
 
     public  void onfblogin(View view){
@@ -211,8 +233,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             //mAuth.getCurrentUser().isEmailVerified();
                             Toast.makeText(LoginActivity.this, "Welcome "+user.getEmail(), Toast.LENGTH_SHORT).show();
-                            Intent intent=new Intent(LoginActivity.this,HomeActivity.class);
-                            startActivity(intent);
+
                             finish();
                            // updateUI(user);
                         } else {
@@ -227,6 +248,38 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+    public void onAuthsuccess(FirebaseUser user){
+        if(user!=null){
+            myRef=FirebaseDatabase.getInstance().getReference().child("User").child(user.getUid()).child("usertype");
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String value=dataSnapshot.getValue(String.class);
+                    if(value.equals("Teacher")){
+                        Intent intent=new Intent(LoginActivity.this,HomeTeacherActivity.class);
+                        startActivity(intent);
+                    }
+                    else if(value.equals("Student"))
+                    {
+                        Intent intent=new Intent(LoginActivity.this,HomeActivity.class);
+                        startActivity(intent);
+
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

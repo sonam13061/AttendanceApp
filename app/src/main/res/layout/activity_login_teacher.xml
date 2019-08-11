@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F1E8BB"
+    tools:context=".init.LoginTeacherActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:textAlignment="center"
+        android:text="LOGIN HERE"
+
+        android:textSize="24sp"
+        android:textStyle="italic"/>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="5dp"
+        app:cardCornerRadius="5dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+
+                android:background="@drawable/background">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Email Address"
+                    android:paddingTop="5dp"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/emailteacher"
+                    android:inputType="textEmailAddress"
+
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+
+                android:background="@drawable/background">
+
+
+
+
+
+                <EditText
+                    android:layout_width="270dp"
+                    android:paddingTop="5dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Password"
+
+                    android:background="@android:color/transparent"
+                    android:id="@+id/passteacher"
+                    android:inputType="textPassword"
+
+                    />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_margin="20dp"
+        android:textSize="20dp"
+        android:id="@+id/loginteacher"
+        android:text="LOGIN"
+        android:backgroundTint="#80D8FF"
+
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:id="@+id/forgotteacher"
+        android:text="Forgot password?"
+        android:textAllCaps="false"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/registerteacher"
+        android:textAllCaps="false"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:text="Not Registered Yet? Register Here."
+        android:textColor="#122E58"/>
+
+
+
+</LinearLayout>

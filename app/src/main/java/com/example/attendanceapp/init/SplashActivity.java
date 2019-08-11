@@ -3,6 +3,7 @@ package com.example.attendanceapp.init;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -13,6 +14,7 @@ import android.util.Log;
 
 import com.example.attendanceapp.HomeActivity;
 import com.example.attendanceapp.R;
+import com.example.attendanceapp.utils.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.security.MessageDigest;
@@ -20,6 +22,10 @@ import java.security.NoSuchAlgorithmException;
 
 public class SplashActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    SharedPreferences prefs;
+    String utype;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +33,11 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         mAuth = FirebaseAuth.getInstance();
         getSupportActionBar().hide();
+        prefs=getSharedPreferences("prefs", MODE_PRIVATE);
         hash();
+        utype=prefs.getString(Constants.USERTYPE, "");
+
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -35,17 +45,23 @@ public class SplashActivity extends AppCompatActivity {
                     Intent intent = new Intent(SplashActivity.this, selectactivity.class);
                     startActivity(intent);
                     finish();
-                } else if(!mAuth.getCurrentUser().isEmailVerified()) {
-
+                } else if (!mAuth.getCurrentUser().isEmailVerified()) {
 
                     Intent intent = new Intent(SplashActivity.this, selectactivity.class);
                     startActivity(intent);
                     finish();
-                }
-                else {
-                    Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
+                } else if ( mAuth.getCurrentUser().isEmailVerified()&& utype.equals("Teacher")){
+
+                    Intent intent = new Intent(SplashActivity.this, HomeTeacherActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            else if(mAuth.getCurrentUser().isEmailVerified()&& utype.equals("Student")){
+                Intent intent=new Intent(SplashActivity.this,HomeActivity.class);
+                startActivity(intent);
+                finish();
+
+
 
                                     }
 
