@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
    SharedPreferences prefs;
    SharedPreferences.Editor editor;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference(Constants.STUDENT);
+    DatabaseReference myRef = database.getReference(Constants.User);
    private EditText uname,pass;
    private FirebaseAuth mAuth;
    public CallbackManager mCallbackManager;
@@ -105,6 +105,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User s=dataSnapshot.getValue(User.class);
+                Log.d("user_data", s.toString());
                 editor.putString(Constants.NAME, s.getName());
                 editor.putString(Constants.EMAIL,s.getEmail());
                 editor.putString(Constants.COURSE, s.getCourse());
@@ -113,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d("user_data","Error");
             }
         });
 
@@ -134,10 +135,9 @@ public class LoginActivity extends AppCompatActivity {
                             //Log.d(TAG, "signInWithEmail:success");
                             if (mAuth.getCurrentUser().isEmailVerified()) {
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                getuserdata(user);
-                                Authcheck();
+                                onAuthsuccess(user);
 
-                                Toast.makeText(LoginActivity.this, "Welcome : " + user.getEmail(), Toast.LENGTH_SHORT).show();
+
                             } else {
                                 Toast.makeText(LoginActivity.this, "Please verify your email", Toast.LENGTH_SHORT).show();
                             }
@@ -176,6 +176,8 @@ public class LoginActivity extends AppCompatActivity {
             String usertype = prefs.getString(Constants.USERTYPE, "");
             String usertype1 = "Teacher";
             String usertype2 = "Student";
+            FirebaseUser user = mAuth.getCurrentUser();
+            getuserdata(user);
             if (usertype.equals(usertype2)) {
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
 
@@ -187,6 +189,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
         }
+  
 
 
 
@@ -248,21 +251,25 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
-    public void onAuthsuccess(FirebaseUser user){
+    public void onAuthsuccess(final FirebaseUser user){
+        getuserdata(user);
         if(user!=null){
+           // FirebaseUser user = mAuth.getCurrentUser();
             myRef=FirebaseDatabase.getInstance().getReference().child("User").child(user.getUid()).child("usertype");
             myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     String value=dataSnapshot.getValue(String.class);
                     if(value.equals("Teacher")){
-                        Intent intent=new Intent(LoginActivity.this,HomeTeacherActivity.class);
-                        startActivity(intent);
+                        Toast.makeText(LoginActivity.this, "Please login through Teacher portal", Toast.LENGTH_SHORT).show();
+                        FirebaseAuth.getInstance().signOut();
                     }
                     else if(value.equals("Student"))
                     {
                         Intent intent=new Intent(LoginActivity.this,HomeActivity.class);
                         startActivity(intent);
+                        Toast.makeText(LoginActivity.this, "Welcome : " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                        finish();
 
                     }
 

@@ -74,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         init();
         courselist.add("------Select Course-----");
         final ArrayAdapter<String> adapter=new ArrayAdapter<>(RegisterActivity.this, android.R.layout.simple_list_item_1,courselist);
-        spinner.setAdapter(adapter);
+            spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
         DatabaseReference courseRef=database.getReference(Constants.COURSES);
         courseRef.addValueEventListener(new ValueEventListener() {

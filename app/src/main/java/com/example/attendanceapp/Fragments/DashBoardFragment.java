@@ -144,6 +144,7 @@ public class DashBoardFragment extends Fragment implements OnDateSetListener{
                     date1=y+m+d;
                 }
             },day,month,year);
+                datePickerDialog.updateDate(year, month, day);
             datePickerDialog.show();
             }
         });
@@ -166,6 +167,7 @@ public class DashBoardFragment extends Fragment implements OnDateSetListener{
                             date2=y+m+d;
                         }
                     },day,month,year);
+                datePickerDialog.updateDate(year, month, day);
                     datePickerDialog.show();
 
 

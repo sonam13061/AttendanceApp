@@ -24,6 +24,7 @@ public class selectactivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent=new Intent(selectactivity.this,LoginActivity.class);
                 startActivity(intent);
+                finish();
 
             }
         });
@@ -32,6 +33,7 @@ public class selectactivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent=new Intent(selectactivity.this,LoginTeacherActivity.class);
                 startActivity(intent);
+                finish();
 
 
             }

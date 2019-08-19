@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:textAlignment="center"
-        android:text="LOGIN HERE"
+        android:text="TEACHER PORTAL"
 
         android:textSize="24sp"
         android:textStyle="italic"/>

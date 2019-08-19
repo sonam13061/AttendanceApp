@@ -64,6 +64,14 @@ public class User {
         this.usertype = usertype;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", course='" + course + '\'' +
+                ", usertype='" + usertype + '\'' +
+                ", pin=" + pin +
+                '}';
+    }
 }

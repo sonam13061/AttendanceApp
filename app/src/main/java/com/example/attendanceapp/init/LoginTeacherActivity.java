@@ -142,10 +142,9 @@ public class LoginTeacherActivity extends AppCompatActivity {
                             if(mAuth.getCurrentUser().isEmailVerified()) {
                                 FirebaseUser user = mAuth.getCurrentUser();
 
-                                Toast.makeText(LoginTeacherActivity.this, "Welcome : " + user.getEmail(), Toast.LENGTH_SHORT).show();
-                                getuserdata(user);
-                                Authcheck();
-                            }
+
+
+                                onAuthsuccess(user);}
                             else{
                                 Toast.makeText(LoginTeacherActivity.this, "Please verify your email", Toast.LENGTH_SHORT).show();
                             }
@@ -174,17 +173,20 @@ public class LoginTeacherActivity extends AppCompatActivity {
     }
 
 
-    public void Authcheck(){
+    public void Authcheck2(){
 
-
-        String usertype = prefs.getString(Constants.USERTYPE, "default value");
+        FirebaseUser user = mAuth.getCurrentUser();
+        String usertype = prefs.getString(Constants.USERTYPE,"");
         String usertype1 = "Teacher";
         String usertype2 = "Student";
+
+        getuserdata(user);
         if (usertype.equals(usertype2)) {
             Toast.makeText(LoginTeacherActivity.this, "Please Login through Student portal", Toast.LENGTH_SHORT).show();
-            FirebaseAuth.getInstance().signOut();
+
 
         } else if (usertype.equals(usertype1)) {
+
             Intent intent = new Intent(LoginTeacherActivity.this, HomeTeacherActivity.class);
 
             startActivity(intent);
@@ -192,21 +194,29 @@ public class LoginTeacherActivity extends AppCompatActivity {
         }
 
     }
-    public void onAuthsuccess(FirebaseUser user){
+    public void onAuthsuccess(final FirebaseUser user){
         if(user!=null){
-           myRef=FirebaseDatabase.getInstance().getReference().child("User").child(user.getUid()).child("usertype");
+            getuserdata(user);
+         myRef=FirebaseDatabase.getInstance().getReference().child("User").child(user.getUid()).child("usertype");
+
            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                @Override
                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                    String value=dataSnapshot.getValue(String.class);
+                   Log.d("value",value+"");
                    if(value.equals("Teacher")){
                        Intent intent=new Intent(LoginTeacherActivity.this,HomeTeacherActivity.class);
+
                        startActivity(intent);
                        finish();
+
+                       Toast.makeText(LoginTeacherActivity.this, "Welcome : " + user.getEmail(), Toast.LENGTH_SHORT).show();
+
                    }
                    else if(value.equals("Student"))
                    {
                        Toast.makeText(LoginTeacherActivity.this, "Please Login through Student portal", Toast.LENGTH_SHORT).show();
+                       FirebaseAuth.getInstance().signOut();
 
                    }
 

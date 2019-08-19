@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.attendanceapp.R;
 import com.example.attendanceapp.model.Attendance;
+import com.example.attendanceapp.model.User;
 import com.example.attendanceapp.utils.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,10 +45,16 @@ public class HomeFragment extends Fragment {
     ProgressBar progressBar;
     private TextView t1,t2;
     private Button btn;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
+     String name ;
+     String naam;
+    FirebaseAuth mAuth;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference(Constants.ATTENDENCE);
+    DatabaseReference ref=database.getReference(Constants.User);
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
+    public static final String MTAG="";
+
 
 
     // TODO: Rename and change types of parameters
@@ -78,6 +85,7 @@ public class HomeFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,16 +93,52 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-    }
+            }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
         progressBar=view.findViewById(R.id.progress);
+        mAuth=FirebaseAuth.getInstance();
+        FirebaseUser user=mAuth.getCurrentUser();
+
+
+        //FirebaseUser u=mAuth.getCurrentUser();
+
         t1=view.findViewById(R.id.welcome);
         t2=view.findViewById(R.id.date);
-        t1.setText("Welcome "+prefs.getString(Constants.NAME,""));
+       String uid= FirebaseAuth.getInstance().getUid();
+        ref.child(uid).addValueEventListener(new ValueEventListener() {
+
+            @Override
+
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                Log.d(TAG, "OnDataChange Success");
+
+                String name = (String) dataSnapshot.child("name").getValue();
+
+                t1.setText("Welcome "+name);
+
+            }
+
+
+
+            @Override
+
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                Log.d(TAG, "OnDataCancelled");
+
+            }
+
+        });
+
+       // t1.setText("Welcome "+prefs.getString(Constants.NAME,""));
+         //t1.setText("Welcome "+naam);
+      //  t1.setText("Welcome"+u.getName());
         btn=view.findViewById(R.id.mark);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,9 +190,75 @@ public class HomeFragment extends Fragment {
     }
 
 
+        public void  getcurrentusername( final  FirebaseUser user){
 
-    public void markAttendance(){
-        String year,month,day,time,course,uid,name;
+                if(user!=null) {
+                    ref = database.getReference().child("User").child(user.getUid()).child("name");
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for(DataSnapshot d:dataSnapshot.getChildren()) {
+                              User  u = d.getValue(User.class);
+                              naam=u.getName();
+                            }
+
+                            //Log.d(MTAG,name);
+                            //System.out.print(name);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+                else{
+
+                }
+        }
+
+
+    private void markAttendance(){
+
+        Log.d(TAG, "markAttendance function");
+
+        String uid = mAuth.getInstance().getCurrentUser().getUid();
+
+        DatabaseReference reff = database.getReference(Constants.User);
+
+        reff.child(uid).addValueEventListener(new ValueEventListener() {
+
+            @Override
+
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                Log.d(TAG, "Getting name and course");
+
+                String name = (String)(dataSnapshot.child("name").getValue());
+
+                String course = (String)(dataSnapshot.child("course").getValue());
+
+                Attenddetails(name,course);
+
+            }
+
+
+
+            @Override
+
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                Log.d(TAG, "Fail to get name and course");
+
+            }
+
+        });
+
+
+
+    }
+    public void Attenddetails(String name,String course){
+        String year,month,day,time,uid;
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy/MM/dd/HH:mm:ss");
         String Currentdateandtime=simpleDateFormat.format(new Date());
         String[] arr=Currentdateandtime.split("/");
@@ -156,8 +266,8 @@ public class HomeFragment extends Fragment {
         month=arr[1];
         day=arr[2];
         time=arr[3];
-        course=prefs.getString(Constants.COURSE, "not found");
-        name=prefs.getString(Constants.NAME, "not found");
+       // course=prefs.getString(Constants.COURSE, "not found");
+        //name=prefs.getString(Constants.NAME, "not found");
         String date=year+month+day;
 
         uid= FirebaseAuth.getInstance().getUid();
@@ -199,6 +309,7 @@ public class HomeFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         btn.setVisibility(View.VISIBLE);
                         btn.setEnabled(true);
+                        btn.setText("Mark my attendance");
                     }
             }
 

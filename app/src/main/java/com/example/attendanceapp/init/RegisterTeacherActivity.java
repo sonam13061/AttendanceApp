@@ -42,7 +42,7 @@ public class RegisterTeacherActivity extends AppCompatActivity {
 
 
     EditText nm, mail, pwd, confirm,pin;
-    String name,email,pass,usertype,key;
+    String name,email,pass,usertype1,key;
     int pinn;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
@@ -93,7 +93,7 @@ public class RegisterTeacherActivity extends AppCompatActivity {
                 name=nm.getText().toString();
                 pass=pwd.getText().toString();
                 pinn= Integer.parseInt(pin.getText().toString());
-                usertype="Teacher";
+                usertype1="Teacher";
 
                 if(pinn!=Integer.parseInt(key)){
                     pin.setError("pin is wrong");
@@ -145,7 +145,7 @@ public class RegisterTeacherActivity extends AppCompatActivity {
                     return;
 
                 }
-                signup(name,email,pass, usertype,pinn);
+                signup(name,email,pass, usertype1,pinn);
 
 
 

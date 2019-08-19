@@ -4,14 +4,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.attendanceapp.Fragments.HomeFragment;
 import com.example.attendanceapp.HomeActivity;
 import com.example.attendanceapp.R;
+import com.example.attendanceapp.model.User;
+import com.example.attendanceapp.utils.Constants;
 import com.facebook.login.LoginManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -20,6 +24,12 @@ import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -27,10 +37,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class HomeTeacherActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    Button getall,getfilterd;
+    FirebaseDatabase database=FirebaseDatabase.getInstance();
+    FirebaseAuth mAuth;
+    DatabaseReference myRef=database.getReference(Constants.User);
+    TextView welteacher;
+    String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +62,45 @@ public class HomeTeacherActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+        });
+        getall=findViewById(R.id.getall);
+        getfilterd=findViewById(R.id.getfiltered);
+        mAuth=FirebaseAuth.getInstance();
+        FirebaseUser user=mAuth.getCurrentUser();
+        myRef.child(user.getUid());
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot d:dataSnapshot.getChildren()) {
+
+
+                    name = d.child("name").getValue(String.class);
+
+                }
+                welteacher.setText("Welcome " + name);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        welteacher=findViewById(R.id.welteacher);
+
+
+        getall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(HomeTeacherActivity.this,GetAllAttendance.class);
+                startActivity(intent);
+            }
+        });
+        getfilterd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(HomeTeacherActivity.this, FilterActivity.class);
+                startActivity(intent);
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

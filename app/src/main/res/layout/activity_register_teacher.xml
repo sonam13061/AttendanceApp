@@ -7,6 +7,15 @@
     android:background="#D36F52"
     android:orientation="vertical"
     tools:context=".init.RegisterTeacherActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:textAlignment="center"
+        android:text="TEACHER PORTAL"
+
+        android:textSize="24sp"
+        android:textStyle="italic"/>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
