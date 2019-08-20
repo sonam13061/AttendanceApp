@@ -44,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     private Spinner spinner;
     EditText nm, mail, pwd, confirm;
     String name,email,pass,course,usertype;
+    int pin;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -101,6 +102,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 name=nm.getText().toString();
                 pass=pwd.getText().toString();
                 course=spinner.getSelectedItem().toString();
+                pin= Integer.parseInt(null);
                 usertype="Student";
 
                 if(course.equals(course_s)) {
@@ -148,7 +150,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
                 }
 
-                signup(name,email, pass,course,usertype );
+                signup(name,email, pass,course,usertype,pin );
 
 
             }
@@ -166,7 +168,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         });
     }
 
-    public void signup(final  String name,final String email,final String password,final String course,final  String type) {
+    public void signup(final  String name,final String email,final String password,final String course,final  String type,final int pin) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -188,7 +190,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                             if(task.isSuccessful()){
 
                                 //Toast.makeText(RegisterActivity.this, "Verification link sent to"+mail.getText(), Toast.LENGTH_SHORT).show();
-                                User s=new User(name, email, course,type);
+                                User s=new User(name, email, course,type,pin);
                                 myRef.child(user.getUid()).setValue(s);
                                 editor.putString(Constants.NAME, name);
                                 editor.putString(Constants.EMAIL, email);

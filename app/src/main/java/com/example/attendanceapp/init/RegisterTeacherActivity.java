@@ -42,7 +42,7 @@ public class RegisterTeacherActivity extends AppCompatActivity {
 
 
     EditText nm, mail, pwd, confirm,pin;
-    String name,email,pass,usertype1,key;
+    String name,email,pass,usertype1,key,course;
     int pinn;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
@@ -94,6 +94,7 @@ public class RegisterTeacherActivity extends AppCompatActivity {
                 pass=pwd.getText().toString();
                 pinn= Integer.parseInt(pin.getText().toString());
                 usertype1="Teacher";
+                course=null;
 
                 if(pinn!=Integer.parseInt(key)){
                     pin.setError("pin is wrong");
@@ -145,7 +146,7 @@ public class RegisterTeacherActivity extends AppCompatActivity {
                     return;
 
                 }
-                signup(name,email,pass, usertype1,pinn);
+                signup(name,email,pass, usertype1,pinn,course);
 
 
 
@@ -161,7 +162,7 @@ public class RegisterTeacherActivity extends AppCompatActivity {
         });
 
     }
-    public void signup(final  String name, final String email , final String password,final String usertype,final int pinn) {
+    public void signup(final  String name, final String email , final String password,final String usertype,final int pinn,final  String course) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -183,7 +184,7 @@ public class RegisterTeacherActivity extends AppCompatActivity {
                             if(task.isSuccessful()){
 
                                 //Toast.makeText(RegisterActivity.this, "Verification link sent to"+mail.getText(), Toast.LENGTH_SHORT).show();
-                                User s=new User(name, email, usertype, pinn);
+                                User s=new User(name, email,course, usertype, pinn);
                                 myRef.child(user.getUid()).setValue(s);
                                 editor.putString(Constants.NAME, name);
                                 editor.putString(Constants.EMAIL, email);

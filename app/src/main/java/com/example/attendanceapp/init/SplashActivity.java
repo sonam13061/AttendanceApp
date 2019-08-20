@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.media.MediaRouter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.attendanceapp.HomeActivity;
 import com.example.attendanceapp.R;
+import com.example.attendanceapp.model.User;
 import com.example.attendanceapp.utils.Constants;
 import com.facebook.CallbackManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +34,7 @@ import java.security.NoSuchAlgorithmException;
 public class SplashActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     SharedPreferences prefs;
+    User userr;
         String value;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -69,7 +72,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
 
 
-                FirebaseUser user=mAuth.getCurrentUser();
+                final FirebaseUser user=mAuth.getCurrentUser();
 
 
 
@@ -92,16 +95,17 @@ public class SplashActivity extends AppCompatActivity {
                     myRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                             for(DataSnapshot d:dataSnapshot.getChildren()) {
 
+                                userr= d.child("usertype").getValue(User.class);
 
-                                value = d.child("usertype").getValue(String.class);
 
                             }
-                            Toast.makeText(SplashActivity.this, value, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SplashActivity.this, userr.getName(), Toast.LENGTH_SHORT).show();
 
-                            if(value!=null) {
-                                if (value.equals(teacher)) {
+                            if(userr!=null) {
+                                if (userr.getUsertype().equals(teacher)) {
 
                                     Intent intent = new Intent(SplashActivity.this, HomeTeacherActivity.class);
                                     startActivity(intent);

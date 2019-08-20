@@ -68,7 +68,7 @@ public class HomeTeacherActivity extends AppCompatActivity
         getfilterd=findViewById(R.id.getfiltered);
         mAuth=FirebaseAuth.getInstance();
         FirebaseUser user=mAuth.getCurrentUser();
-        myRef.child(user.getUid());
+        myRef.child(FirebaseAuth.getInstance().getUid());
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

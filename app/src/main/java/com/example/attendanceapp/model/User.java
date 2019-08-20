@@ -15,7 +15,16 @@ public class User {
         this.pin = pin;
     }
 
+
     public User() {
+    }
+
+    public User(String name, String email, String course, String usertype, int pin) {
+        this.name = name;
+        this.email = email;
+        this.course = course;
+        this.usertype = usertype;
+        this.pin = pin;
     }
 
     public User(String name, String email, String usertype, int pin) {
