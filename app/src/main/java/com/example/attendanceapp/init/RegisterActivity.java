@@ -43,14 +43,14 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     private FirebaseAuth mAuth;
     private Spinner spinner;
     EditText nm, mail, pwd, confirm;
-    String name,email,pass,course,usertype;
+    String name,email,pass,course,usertype,nickname;
     int pin;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference(Constants.User);
     List<String> courselist=new ArrayList<>();
-    String course_s="------Select Course-----";
+    String course_s="   ------Select Course------";
 
     public void init() {
         signup = findViewById(R.id.signup);
@@ -73,7 +73,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         setContentView(R.layout.activity_register);
         getSupportActionBar().hide();
         init();
-        courselist.add("------Select Course-----");
+        courselist.add("   ------Select Course------");
         final ArrayAdapter<String> adapter=new ArrayAdapter<>(RegisterActivity.this, android.R.layout.simple_list_item_1,courselist);
             spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
@@ -102,8 +102,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 name=nm.getText().toString();
                 pass=pwd.getText().toString();
                 course=spinner.getSelectedItem().toString();
-                pin= Integer.parseInt(null);
+                pin= 0;
                 usertype="Student";
+                nickname=nm.getText().toString();
+
 
                 if(course.equals(course_s)) {
                     Toast.makeText(RegisterActivity.this, "Please select course", Toast.LENGTH_SHORT).show();
@@ -150,7 +152,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
                 }
 
-                signup(name,email, pass,course,usertype,pin );
+                signup(name,email, pass,course,usertype,pin,nickname );
 
 
             }
@@ -168,7 +170,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         });
     }
 
-    public void signup(final  String name,final String email,final String password,final String course,final  String type,final int pin) {
+    public void signup(final  String name, final String email, final String password, final String course, final  String type, final int pin, final String nickname) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -190,7 +192,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                             if(task.isSuccessful()){
 
                                 //Toast.makeText(RegisterActivity.this, "Verification link sent to"+mail.getText(), Toast.LENGTH_SHORT).show();
-                                User s=new User(name, email, course,type,pin);
+                                 User s=new User(name, email, course,type,pin,nickname);
                                 myRef.child(user.getUid()).setValue(s);
                                 editor.putString(Constants.NAME, name);
                                 editor.putString(Constants.EMAIL, email);

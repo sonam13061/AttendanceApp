@@ -61,6 +61,8 @@ public class DashBoardFragment extends Fragment implements OnDateSetListener{
     List<Attendance> attendanceList=new ArrayList<>();
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference(Constants.ATTENDENCE);
+
+    DatabaseReference Ref=database.getReference();
     ListView listView;
     Button b1,b2;
     String date1,date2;
@@ -242,7 +244,6 @@ public class DashBoardFragment extends Fragment implements OnDateSetListener{
             }
 
         });
-
 
     }
 

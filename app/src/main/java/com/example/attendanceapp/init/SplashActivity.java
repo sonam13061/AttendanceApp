@@ -91,18 +91,18 @@ public class SplashActivity extends AppCompatActivity {
                     final String teacher="Teacher";
                     String student="Student";
                    // final String[] value = new String[1];
-                    myRef = database.getReference("attendanceapp-3b18a").child("User").child(user.getUid());
+                    myRef = database.getReference().child("User").child(user.getUid());
                     myRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                            for(DataSnapshot d:dataSnapshot.getChildren()) {
-
-                                userr= d.child("usertype").getValue(User.class);
 
 
-                            }
-                            Toast.makeText(SplashActivity.this, userr.getName(), Toast.LENGTH_SHORT).show();
+                                userr= dataSnapshot.getValue(User.class);
+
+
+
+                          //  Toast.makeText(SplashActivity.this, userr.getName(), Toast.LENGTH_SHORT).show();
 
                             if(userr!=null) {
                                 if (userr.getUsertype().equals(teacher)) {

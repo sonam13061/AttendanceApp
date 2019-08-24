@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".init.ProfileActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your Profile"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="#B71C1C"
+        android:textSize="26sp"/>
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/pic"
+        android:id="@+id/profilepic"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"/>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:layout_marginLeft="4dp"
+                android:textStyle="bold"
+                android:text="Nickname:-"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editnickname"
+            android:textColor="#1A237E"
+            android:textSize="20sp"
+            android:text="Nick name"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="20sp"
+                android:textStyle="bold"
+                android:text="Name:-"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:id="@+id/editname"
+                android:textSize="20sp"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="4dp"
+                android:textColor="#E65100"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="20sp"
+                android:textStyle="bold"
+                android:text="Email Address:-"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email Address"
+            android:id="@+id/editemail"
+            android:layout_marginLeft="4dp"
+            android:textSize="20sp"
+            android:layout_marginTop="2dp"
+            android:textColor="#006064"
+            />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/buttton"
+        android:text="Edit profile"
+        android:textColor="#fff"
+        android:id="@+id/update"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center_horizontal"
+        />
+
+</LinearLayout>

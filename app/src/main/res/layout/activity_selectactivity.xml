@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
+    android:background="@drawable/welcome"
     tools:context=".init.selectactivity">
     <LinearLayout
         android:layout_width="wrap_content"
@@ -16,7 +17,7 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:id="@+id/teacher"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="150dp"
 
         android:src="@drawable/teacher"
 
@@ -27,7 +28,7 @@
             android:text="Teacher"
 
             android:textSize="24sp"
-            android:textColor="#000"
+            android:textColor="#fff"
             android:gravity="center"
             />
     </LinearLayout>
@@ -41,7 +42,7 @@
         android:layout_height="120dp"
         android:id="@+id/stud"
         android:layout_gravity="center"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="150dp"
 
         android:src="@drawable/student"
 
@@ -52,7 +53,7 @@
             android:text="Student"
 
             android:textSize="24sp"
-            android:textColor="#000"
+            android:textColor="#fff"
             android:gravity="center"
             />
     </LinearLayout>

@@ -46,9 +46,10 @@ public class HomeTeacherActivity extends AppCompatActivity
     Button getall,getfilterd;
     FirebaseDatabase database=FirebaseDatabase.getInstance();
     FirebaseAuth mAuth;
+    TextView name,email;
     DatabaseReference myRef=database.getReference(Constants.User);
     TextView welteacher;
-    String name;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,20 +66,21 @@ public class HomeTeacherActivity extends AppCompatActivity
             }
         });
         getall=findViewById(R.id.getall);
+
         getfilterd=findViewById(R.id.getfiltered);
         mAuth=FirebaseAuth.getInstance();
         FirebaseUser user=mAuth.getCurrentUser();
-        myRef.child(FirebaseAuth.getInstance().getUid());
-        myRef.addValueEventListener(new ValueEventListener() {
+        String uid=FirebaseAuth.getInstance().getUid();
+
+        myRef.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot d:dataSnapshot.getChildren()) {
 
 
-                    name = d.child("name").getValue(String.class);
+                 String nickname =(String) dataSnapshot.child("nickname").getValue();
 
-                }
-                welteacher.setText("Welcome " + name);
+
+                welteacher.setText("Welcome " + nickname);
             }
 
             @Override
@@ -105,11 +107,38 @@ public class HomeTeacherActivity extends AppCompatActivity
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
+        View Headerview=navigationView.getHeaderView(0);
+        name=Headerview.findViewById(R.id.nm);
+        email=Headerview.findViewById(R.id.em);
+        setheader();
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+    }
+    public  void setheader(){
+        FirebaseUser user=mAuth.getCurrentUser();
+        String uid=user.getUid();
+
+        myRef.child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String nm= (String) dataSnapshot.child("name").getValue();
+                String em=(String) dataSnapshot.child("email").getValue();
+                name.setText(nm);
+                email.setText(em);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override
@@ -150,18 +179,10 @@ public class HomeTeacherActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
+        if (id == R.id.nav_profile) {
+            Intent intent=new Intent(HomeTeacherActivity.this,ProfileActivity.class);
+            startActivity(intent);
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
         else if(id==R.id.nav_logout){
             AlertDialog.Builder builder=new AlertDialog.Builder(this);

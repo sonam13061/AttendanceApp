@@ -9,7 +9,9 @@ import com.example.attendanceapp.Fragments.DashBoardFragment;
 import com.example.attendanceapp.Fragments.HomeFragment;
 import com.example.attendanceapp.Fragments.NotificationFragment;
 import com.example.attendanceapp.Fragments.OnFragmentInteractionListener;
+import com.example.attendanceapp.init.HomeTeacherActivity;
 import com.example.attendanceapp.init.LoginActivity;
+import com.example.attendanceapp.init.ProfileActivity;
 import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -26,6 +28,12 @@ import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -36,15 +44,21 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.Menu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnFragmentInteractionListener {
+    TextView name,email;
+    FirebaseAuth mAuth;
+    FirebaseDatabase database=FirebaseDatabase.getInstance();
+    DatabaseReference myRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        mAuth=FirebaseAuth.getInstance();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         BottomNavigationView navView = findViewById(R.id.bott_nav_view);
@@ -60,11 +74,37 @@ public class HomeActivity extends AppCompatActivity
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        View Headerview=navigationView.getHeaderView(0);
+       name=Headerview.findViewById(R.id.name);
+       email=Headerview.findViewById(R.id.email);
+       setheader();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public  void setheader(){
+        FirebaseUser user=mAuth.getCurrentUser();
+    String uid=user.getUid();
+        myRef=database.getReference().child("User").child(uid);
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String nm= (String) dataSnapshot.child("name").getValue();
+                String em=(String) dataSnapshot.child("email").getValue();
+                name.setText(nm);
+                email.setText(em);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override
@@ -105,18 +145,9 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_profile) {
+        Intent intent=new Intent(HomeActivity.this, ProfileActivity.class);
+        startActivity(intent);
         }
         else if(id==R.id.nav_logout){
             AlertDialog.Builder builder=new AlertDialog.Builder(this);

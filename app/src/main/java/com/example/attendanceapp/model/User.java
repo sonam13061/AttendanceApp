@@ -6,6 +6,24 @@ public class User {
     public String course;
     public String usertype;
     public int pin;
+    public String nickname;
+
+    public User(String name, String email, String course, String usertype, int pin, String nickname) {
+        this.name = name;
+        this.email = email;
+        this.course = course;
+        this.usertype = usertype;
+        this.pin = pin;
+        this.nickname = nickname;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
     public int getPin() {
         return pin;

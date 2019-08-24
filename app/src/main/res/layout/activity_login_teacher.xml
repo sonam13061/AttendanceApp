@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F1E8BB"
+    android:background="@drawable/tech"
+
     tools:context=".init.LoginTeacherActivity">
     <TextView
         android:layout_width="match_parent"
@@ -13,7 +14,7 @@
         android:layout_marginTop="50dp"
         android:textAlignment="center"
         android:text="TEACHER PORTAL"
-
+        android:textColor="#fff"
         android:textSize="24sp"
         android:textStyle="italic"/>
 
@@ -99,6 +100,7 @@
         android:id="@+id/forgotteacher"
         android:text="Forgot password?"
         android:textAllCaps="false"
+        android:textColor="#fff"
         />
 
     <TextView
@@ -108,7 +110,7 @@
         android:textAllCaps="false"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:text="Not Registered Yet? Register Here."
-        android:textColor="#122E58"/>
+        android:textColor="#fff"/>
 
 
 

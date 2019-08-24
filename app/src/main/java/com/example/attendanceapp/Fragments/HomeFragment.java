@@ -109,18 +109,19 @@ public class HomeFragment extends Fragment {
 
         t1=view.findViewById(R.id.welcome);
         t2=view.findViewById(R.id.date);
-       String uid= FirebaseAuth.getInstance().getUid();
+       final String uid= FirebaseAuth.getInstance().getUid();
         ref.child(uid).addValueEventListener(new ValueEventListener() {
 
             @Override
 
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+
                 Log.d(TAG, "OnDataChange Success");
 
-                String name = (String) dataSnapshot.child("name").getValue();
+                String nickname = (String) dataSnapshot.child("nickname").getValue();
 
-                t1.setText("Welcome "+name);
+                t1.setText("Welcome "+nickname);
 
             }
 
@@ -136,6 +137,7 @@ public class HomeFragment extends Fragment {
 
         });
 
+
        // t1.setText("Welcome "+prefs.getString(Constants.NAME,""));
          //t1.setText("Welcome "+naam);
       //  t1.setText("Welcome"+u.getName());
@@ -143,9 +145,9 @@ public class HomeFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                markAttendance();
                  btn.setEnabled(false);
                 btn.setText("You're marked for the day");
+                markAttendance();
 
 
             }

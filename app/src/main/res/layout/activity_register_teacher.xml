@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D36F52"
+    android:background="@drawable/tech"
     android:orientation="vertical"
     tools:context=".init.RegisterTeacherActivity">
     <TextView
@@ -13,7 +13,7 @@
         android:layout_marginTop="50dp"
         android:textAlignment="center"
         android:text="TEACHER PORTAL"
-
+        android:textColor="#fff"
         android:textSize="24sp"
         android:textStyle="italic"/>
     <androidx.cardview.widget.CardView
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="5dp"
         app:cardElevation="5dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="30dp"
         android:layout_marginHorizontal="20dp"
         app:cardUseCompatPadding="true"      >
         <LinearLayout
@@ -133,7 +133,7 @@
         android:id="@+id/clickteacher"
         android:text="Already have an account? Click here"
         android:textAllCaps="false"
-        android:textColor="#122E58"
+        android:textColor="#fff"
         />
 
 
