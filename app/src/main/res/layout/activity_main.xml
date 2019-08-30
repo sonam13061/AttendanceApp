@@ -9,9 +9,9 @@
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottieanim"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_height="300dp"
         app:lottie_rawRes="@raw/tick"
+        android:layout_gravity="center_horizontal"
 
         app:lottie_autoPlay="false"
         app:lottie_loop="false"></com.airbnb.lottie.LottieAnimationView>
@@ -35,10 +35,10 @@
         android:layout_height="wrap_content"
         android:text="Click here to login"
         android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="20dp"
 
         android:id="@+id/clickk"
-        android:backgroundTint="#80D8FF"/>
+        android:background="@drawable/registerbutton"/>
     </LinearLayout>
 
 

@@ -29,6 +29,7 @@
            android:layout_weight="1"
             android:id="@+id/date"
             android:textSize="20sp"
+            android:gravity="end"
             android:textColor="#D50000"
             android:text="Date"
 
@@ -45,16 +46,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/time"
-                android:textColor="#2962FF"
                 android:layout_weight="2"
+
+                android:textColor="#2962FF"
+
 
                 android:text="Time"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/course"
+                android:gravity="end"
                 android:textColor="#00BFA5"
-               android:layout_weight="1"
+                android:layout_weight="1"
 
                 android:text="Course"/>
             </LinearLayout>

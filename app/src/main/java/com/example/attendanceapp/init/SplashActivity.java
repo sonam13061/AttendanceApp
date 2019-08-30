@@ -3,12 +3,15 @@ package com.example.attendanceapp.init;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.media.MediaRouter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
@@ -75,19 +78,24 @@ public class SplashActivity extends AppCompatActivity {
                 final FirebaseUser user=mAuth.getCurrentUser();
 
 
+                if(!isNetworkAvailable()){
+                    Intent intent=new Intent(SplashActivity.this,NointernetActivity.class);
+                    startActivity(intent);
+                    finish();
 
+                }
 
-                if (user == null) {
+                if ( isNetworkAvailable() && user == null) {
                     Intent intent = new Intent(SplashActivity.this, selectactivity.class);
                     startActivity(intent);
                     finish();
-                }  if ( user!= null && !user.isEmailVerified()) {
+                }  if (isNetworkAvailable() && user!= null && !user.isEmailVerified()) {
 
                     Intent intent = new Intent(SplashActivity.this, selectactivity.class);
                     startActivity(intent);
                     finish();
                 }
-                if(user!=null && user.isEmailVerified()){
+                if( isNetworkAvailable() && user!=null && user.isEmailVerified()){
                     final String teacher="Teacher";
                     String student="Student";
                    // final String[] value = new String[1];
@@ -173,4 +181,15 @@ public class SplashActivity extends AppCompatActivity {
         Log.d("errorrr", e.getMessage());
     }
 }
+    public boolean isNetworkAvailable() {
+        ConnectivityManager cm = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        // if no network is available networkInfo will be null
+        // otherwise check if we are connected
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        return false;
+    }
 }

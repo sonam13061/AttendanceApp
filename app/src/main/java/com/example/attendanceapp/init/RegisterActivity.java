@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,8 +44,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     private FirebaseAuth mAuth;
     private Spinner spinner;
     EditText nm, mail, pwd, confirm;
-    String name,email,pass,course,usertype,nickname;
+    String name,email,pass,course,usertype,nickname,profile;
     int pin;
+    ProgressBar progressBar;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -59,6 +61,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         spinner=findViewById(R.id.s1);
         prefs=getSharedPreferences("prefs", MODE_PRIVATE);
         editor=prefs.edit();
+        progressBar=findViewById(R.id.progress);
 
         mail = findViewById(R.id.mail);
 
@@ -98,43 +101,52 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 email=mail.getText().toString();
                 name=nm.getText().toString();
                 pass=pwd.getText().toString();
                 course=spinner.getSelectedItem().toString();
                 pin= 0;
                 usertype="Student";
+                profile="none";
                 nickname=nm.getText().toString();
 
 
                 if(course.equals(course_s)) {
                     Toast.makeText(RegisterActivity.this, "Please select course", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
                 if (TextUtils.isEmpty(name)) {
                     mail.setError("Email field cannot be empty ");
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
                 if (TextUtils.isEmpty(email)) {
                     mail.setError("Email field cannot be empty ");
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
 
                 if (TextUtils.isEmpty(pass)) {
                     pwd.setError("password field cannot be empty ");
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
                 if (TextUtils.isEmpty(confirm.getText().toString())) {
                     confirm.setError("Please confirm the password ");
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
                 if (!pwd.getText().toString().equals(confirm.getText().toString())) {
                     confirm.setError("Password doesn't match");
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
                 if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
 
                     mail.setError("Please enter valid email");
+                    progressBar.setVisibility(View.GONE);
 
                     mail.requestFocus();
 
@@ -145,14 +157,14 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 if(pass.length()<6){
 
                     pwd.setError("Please enter password of minimum 6 digits");
-
+                    progressBar.setVisibility(View.GONE);
                     pwd.requestFocus();
 
                     return;
 
                 }
 
-                signup(name,email, pass,course,usertype,pin,nickname );
+                signup(name,email, pass,course,usertype,pin,nickname,profile );
 
 
             }
@@ -170,14 +182,14 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         });
     }
 
-    public void signup(final  String name, final String email, final String password, final String course, final  String type, final int pin, final String nickname) {
+    public void signup(final  String name, final String email, final String password, final String course, final  String type, final int pin, final String nickname,final String profile) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
                     if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                         Log.d("tag","already exist");
-                        Toast.makeText(RegisterActivity.this, "You have already registered", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, "You have already registered", Toast.LENGTH_SHORT).show();                 progressBar.setVisibility(View.GONE);
                     }
 
 
@@ -192,14 +204,14 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                             if(task.isSuccessful()){
 
                                 //Toast.makeText(RegisterActivity.this, "Verification link sent to"+mail.getText(), Toast.LENGTH_SHORT).show();
-                                 User s=new User(name, email, course,type,pin,nickname);
+                                 User s=new User(name, email, course,type,pin,nickname,profile);
                                 myRef.child(user.getUid()).setValue(s);
-                                editor.putString(Constants.NAME, name);
-                                editor.putString(Constants.EMAIL, email);
-                                editor.putString(Constants.COURSE, course);
-                                editor.putString(Constants.USERTYPE,type);
-
-                                editor.commit();
+                           //     editor.putString(Constants.NAME, name);
+                             //   editor.putString(Constants.EMAIL, email);
+                               // editor.putString(Constants.COURSE, course);
+                               // editor.putString(Constants.USERTYPE,type);
+                                progressBar.setVisibility(View.GONE);
+                                //editor.commit();
                                 Intent intent=new Intent(RegisterActivity.this,MainActivity.class);
                                 intent.putExtra("email", user.getEmail());
                                 startActivity(intent);
@@ -207,6 +219,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                             }
                             else{
                                 Toast.makeText(RegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
                             }
                         }
                     });

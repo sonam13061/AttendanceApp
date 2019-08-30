@@ -2,6 +2,7 @@ package com.example.attendanceapp.init;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.attendanceapp.Fragments.HomeFragment;
@@ -38,6 +39,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +49,7 @@ public class HomeTeacherActivity extends AppCompatActivity
     FirebaseDatabase database=FirebaseDatabase.getInstance();
     FirebaseAuth mAuth;
     TextView name,email;
+    ImageView profilepic;
     DatabaseReference myRef=database.getReference(Constants.User);
     TextView welteacher;
 
@@ -111,6 +114,7 @@ public class HomeTeacherActivity extends AppCompatActivity
         View Headerview=navigationView.getHeaderView(0);
         name=Headerview.findViewById(R.id.nm);
         email=Headerview.findViewById(R.id.em);
+        profilepic=Headerview.findViewById(R.id.imagess);
         setheader();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -128,6 +132,16 @@ public class HomeTeacherActivity extends AppCompatActivity
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String nm= (String) dataSnapshot.child("name").getValue();
                 String em=(String) dataSnapshot.child("email").getValue();
+                String image=(String) dataSnapshot.child("profilepic").getValue();
+
+
+                if(image.equals("none")){
+                  profilepic.setImageResource(R.drawable.pic);
+                }
+                else{
+                    profilepic.setImageURI(Uri.parse(image));
+
+                }
                 name.setText(nm);
                 email.setText(em);
 
@@ -158,20 +172,20 @@ public class HomeTeacherActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+ //   @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

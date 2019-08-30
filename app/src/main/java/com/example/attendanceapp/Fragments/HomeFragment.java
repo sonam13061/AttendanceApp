@@ -224,38 +224,40 @@ public class HomeFragment extends Fragment {
 
         Log.d(TAG, "markAttendance function");
 
-        String uid = mAuth.getInstance().getCurrentUser().getUid();
-
-        DatabaseReference reff = database.getReference(Constants.User);
-
-        reff.child(uid).addValueEventListener(new ValueEventListener() {
-
-            @Override
-
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                Log.d(TAG, "Getting name and course");
-
-                String name = (String)(dataSnapshot.child("name").getValue());
-
-                String course = (String)(dataSnapshot.child("course").getValue());
-
-                Attenddetails(name,course);
-
-            }
-
-
-
-            @Override
-
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                Log.d(TAG, "Fail to get name and course");
-
-            }
-
-        });
-
+//        String uid = mAuth.getInstance().getCurrentUser().getUid();
+//
+//        DatabaseReference reff = database.getReference(Constants.User);
+//
+//        reff.child(uid).addValueEventListener(new ValueEventListener() {
+//
+//            @Override
+//
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                Log.d(TAG, "Getting name and course");
+//
+//                String name = (String)(dataSnapshot.child("name").getValue());
+//
+//                String course = (String)(dataSnapshot.child("course").getValue());
+//
+//                Attenddetails(name,course);
+//
+//            }
+//
+//
+//
+//            @Override
+//
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                Log.d(TAG, "Fail to get name and course");
+//
+//            }
+//
+//        });
+            String name=prefs.getString(Constants.NAME, "");
+            String course=prefs.getString(Constants.COURSE, "");
+            Attenddetails(name, course);
 
 
     }
@@ -276,9 +278,10 @@ public class HomeFragment extends Fragment {
         Attendance attendance=new Attendance(date, time, course, uid, name, date+"_"+uid);
         myRef.push().setValue(attendance);
 
+
         
-        editor.putInt(Constants.TODAY_ATTEND, Integer.parseInt(year+month+day));
-        editor.commit();
+//        editor.putInt(Constants.TODAY_ATTEND, Integer.parseInt(year+month+day));
+  //      editor.commit();
 
 
     }

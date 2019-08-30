@@ -18,29 +18,21 @@
         android:textSize="24sp"
         android:textStyle="italic"/>
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardUseCompatPadding="true"
-        app:cardElevation="5dp"
-        app:cardCornerRadius="5dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginHorizontal="10dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginHorizontal="30dp"
 
-                android:background="@drawable/background">
+                android:background="@drawable/button">
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Email Address"
+                    android:layout_marginLeft="12dp"
                     android:paddingTop="5dp"
                     android:background="@android:color/transparent"
                     android:id="@+id/emailteacher"
@@ -53,8 +45,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="5dp"
 
-                android:background="@drawable/background">
+                android:background="@drawable/button">
 
 
 
@@ -65,6 +59,7 @@
                     android:paddingTop="5dp"
                     android:layout_height="wrap_content"
                     android:hint="Password"
+                    android:layout_marginLeft="12dp"
 
                     android:background="@android:color/transparent"
                     android:id="@+id/passteacher"
@@ -79,18 +74,15 @@
 
 
 
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_margin="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="30dp"
         android:textSize="20dp"
         android:id="@+id/loginteacher"
         android:text="LOGIN"
-        android:backgroundTint="#80D8FF"
+        android:background="@drawable/registerbutton"
 
         />
     <Button
@@ -112,6 +104,12 @@
         android:text="Not Registered Yet? Register Here."
         android:textColor="#fff"/>
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        android:id="@+id/progress"/>
 
 
 </LinearLayout>

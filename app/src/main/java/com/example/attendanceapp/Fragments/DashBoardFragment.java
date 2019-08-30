@@ -114,20 +114,35 @@ public class DashBoardFragment extends Fragment implements OnDateSetListener{
         b2=view.findViewById(R.id.to);
         search=view.findViewById(R.id.search);
         search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(date1==null){
-                    Toast.makeText(getContext(), "Please select From date", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(date2==null){
-                    Toast.makeText(getContext(), "Please select To date", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                getAttendencebydate(date1, date2);
+                                      @Override
+                                      public void onClick(View view) {
+                                          List<Attendance> filteredlist = new ArrayList<>();
 
-            }
-        });
+                                          if (date1 == null) {
+                                              Toast.makeText(getContext(), "Please select From date", Toast.LENGTH_SHORT).show();
+
+                                          }
+                                          if (date2 == null) {
+                                              Toast.makeText(getContext(), "Please select To date", Toast.LENGTH_SHORT).show();
+
+                                          }
+                                          for (Attendance a : attendanceList) {
+                                              if (date1 != null && date2 != null) {
+                                                  if (a.getDate().compareTo(date1) >= 0 && a.getDate().compareTo(date2) <= 0) {
+                                                      filteredlist.add(a);
+                                                      listView.setAdapter(null);
+                                                      MyAdapter adapter = new MyAdapter(getContext(), filteredlist);
+                                                      listView.setAdapter(adapter);
+
+
+                                                  }
+                                              }
+
+
+                                          }
+                                      }
+                                  });
+
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -284,19 +299,26 @@ public class DashBoardFragment extends Fragment implements OnDateSetListener{
         return view;
     }
 }
-List<Attendance> filteredlist=new ArrayList<>();
-public void getAttendencebydate(String d1,String d2){
-
-    for(Attendance a:attendanceList){
-        if(a.getDate().compareTo(d1)>=0&&a.getDate().compareTo(d2)<=0){
-            filteredlist.add(a);
-        }
-        listView.setAdapter(null);
-        MyAdapter adapter=new MyAdapter(getContext(), filteredlist);
-        listView.setAdapter(adapter);
-    }
-
-}
+//    List<Attendance> filteredlist=new ArrayList<>();
+//public void getAttendencebydate(String d1,String d2){
+//
+//
+//    for(Attendance a:attendanceList){
+//        if(d1!=null && d2!=null){
+//        if(a.getDate().compareTo(d1)>=0&&a.getDate().compareTo(d2)<=0){
+//            filteredlist.add(a);
+//            listView.setAdapter(null);
+//            MyAdapter adapter=new MyAdapter(getContext(), filteredlist);
+//            listView.setAdapter(adapter);
+//
+//
+//        }}
+//
+//
+//
+//    }
+//
+//}
 
 public  String dateformat(String date){
         String day,mon,year;

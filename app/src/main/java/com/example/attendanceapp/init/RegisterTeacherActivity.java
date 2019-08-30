@@ -12,6 +12,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,8 +43,9 @@ public class RegisterTeacherActivity extends AppCompatActivity {
 
 
     EditText nm, mail, pwd, confirm,pin;
-    String name,email,pass,usertype1,key,course,nickname;
+    String name,email,pass,usertype1,key,course,nickname,profile;
     int pinn;
+    ProgressBar progressBar;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -56,7 +58,7 @@ public class RegisterTeacherActivity extends AppCompatActivity {
         pin=findViewById(R.id.pin);
         prefs=getSharedPreferences("prefs", MODE_PRIVATE);
         editor=prefs.edit();
-
+        progressBar=findViewById(R.id.progressbar);
         mail = findViewById(R.id.mailteacher);
 
         pwd = findViewById(R.id.pwteacher);
@@ -69,6 +71,7 @@ public class RegisterTeacherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_teacher);
         init();
+
         DatabaseReference myRefs=database.getReference(Constants.PIN);
         myRefs.addValueEventListener(new ValueEventListener() {
             @Override
@@ -89,49 +92,58 @@ public class RegisterTeacherActivity extends AppCompatActivity {
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 email=mail.getText().toString();
                 name=nm.getText().toString();
                 pass=pwd.getText().toString();
                 pinn= Integer.parseInt(pin.getText().toString());
                 usertype1="Teacher";
+                profile="none";
                 course=null;
                 nickname=nm.getText().toString();
 
                 if(pinn!=Integer.parseInt(key)){
                     pin.setError("pin is wrong");
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
                 if(TextUtils.isEmpty(pin.getText().toString())) {
                     pin.setError("Email field cannot be empty ");
+                    progressBar.setVisibility(View.GONE);
                     return;
 
 
                 }
                 if (TextUtils.isEmpty(name)) {
                     mail.setError("Email field cannot be empty ");
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
                 if (TextUtils.isEmpty(email)) {
                     mail.setError("Email field cannot be empty ");
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
 
                 if (TextUtils.isEmpty(pass)) {
                     pwd.setError("password field cannot be empty ");
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
                 if (TextUtils.isEmpty(confirm.getText().toString())) {
                     confirm.setError("Please confirm the password ");
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
                 if (!pwd.getText().toString().equals(confirm.getText().toString())) {
                     confirm.setError("Password doesn't match");
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
                 if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
 
                     mail.setError("Please enter valid email");
-
+                    progressBar.setVisibility(View.GONE);
                     mail.requestFocus();
 
                     return;
@@ -141,13 +153,13 @@ public class RegisterTeacherActivity extends AppCompatActivity {
                 if(pass.length()<6){
 
                     pwd.setError("Please enter password of minimum 6 digits");
-
+                    progressBar.setVisibility(View.GONE);
                     pwd.requestFocus();
 
                     return;
 
                 }
-                signup(name,email,pass, usertype1,pinn,course,nickname);
+                signup(name,email,pass, usertype1,pinn,course,nickname,profile);
 
 
 
@@ -163,7 +175,7 @@ public class RegisterTeacherActivity extends AppCompatActivity {
         });
 
     }
-    public void signup(final  String name, final String email , final String password, final String usertype, final int pinn, final  String course, final String nickname) {
+    public void signup(final  String name, final String email , final String password, final String usertype, final int pinn, final  String course, final String nickname,final String profile) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -171,6 +183,7 @@ public class RegisterTeacherActivity extends AppCompatActivity {
                     if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                         Log.d("tag","already exist");
                         Toast.makeText(RegisterTeacherActivity.this, "You have already registered", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
                     }
 
 
@@ -185,20 +198,21 @@ public class RegisterTeacherActivity extends AppCompatActivity {
                             if(task.isSuccessful()){
 
                                 //Toast.makeText(RegisterActivity.this, "Verification link sent to"+mail.getText(), Toast.LENGTH_SHORT).show();
-                                User s=new User(name, email,course, usertype, pinn,nickname);
+                                User s=new User(name, email,course, usertype, pinn,nickname,profile);
                                 myRef.child(user.getUid()).setValue(s);
-                                editor.putString(Constants.NAME, name);
-                                editor.putString(Constants.EMAIL, email);
+                               // editor.putString(Constants.NAME, name);
+                                //editor.putString(Constants.EMAIL, email);
                                // editor.putString(Constants, pinn);
-                                editor.putString(Constants.USERTYPE, usertype);
-                                editor.commit();
+                                //editor.putString(Constants.USERTYPE, usertype);
+                                //editor.commit();
+                                progressBar.setVisibility(View.GONE);
                                 Intent intent=new Intent(RegisterTeacherActivity.this,WelcomeActivity.class);
                                 intent.putExtra("email", user.getEmail());
                                 startActivity(intent);
                                 finish();
                             }
                             else{
-                                Toast.makeText(RegisterTeacherActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterTeacherActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();           progressBar.setVisibility(View.GONE);
                             }
                         }
                     });

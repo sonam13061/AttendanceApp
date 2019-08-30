@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
    SharedPreferences.Editor editor;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference(Constants.User);
+    ProgressBar progressBar;
    private EditText uname,pass;
    private FirebaseAuth mAuth;
    public CallbackManager mCallbackManager;
@@ -58,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         prefs=getSharedPreferences("prefs", MODE_PRIVATE);
         editor=prefs.edit();
         uname=findViewById(R.id.email);
+        progressBar=findViewById(R.id.progress);
         pass=findViewById(R.id.pass);
         login=findViewById(R.id.login);
         register=findViewById(R.id.register);
@@ -78,17 +81,23 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         login.setOnClickListener(new View.OnClickListener() {
+
+
 
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 if(TextUtils.isEmpty(uname.getText().toString())) {
                     uname.setError("Email address field cannot be empty");
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
 
                  if(TextUtils.isEmpty(pass.getText().toString())){
                     pass.setError("Password field cannot be empty");
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
 
@@ -107,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                 User s=dataSnapshot.getValue(User.class);
                 Log.d("user_data", s.toString());
                 editor.putString(Constants.NAME, s.getName());
-                editor.putString(Constants.EMAIL,s.getEmail());
+             //   editor.putString(Constants.EMAIL,s.getEmail());
                 editor.putString(Constants.COURSE, s.getCourse());
                 editor.commit();
             }
@@ -130,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (task.isSuccessful()) {
 
+
                             // Sign in success, update UI with the signed-in user's information
 
                             //Log.d(TAG, "signInWithEmail:success");
@@ -138,7 +148,9 @@ public class LoginActivity extends AppCompatActivity {
                                 onAuthsuccess(user);
 
 
+
                             } else {
+                                progressBar.setVisibility(View.GONE);
                                 Toast.makeText(LoginActivity.this, "Please verify your email", Toast.LENGTH_SHORT).show();
                             }
 
@@ -147,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
 
                             // Log.w(TAG, "signInWithEmail:failure", task.getException());
-
+                            progressBar.setVisibility(View.GONE);
                             Toast.makeText(LoginActivity.this, "Email address or password is invalid",
 
                                     Toast.LENGTH_SHORT).show();
@@ -185,6 +197,7 @@ public class LoginActivity extends AppCompatActivity {
 
             } else if (usertype.equals(usertype1)) {
                 FirebaseAuth.getInstance().signOut();
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(this, "Please login through Teacher portal", Toast.LENGTH_SHORT).show();
             }
 
@@ -266,6 +279,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     else if(value.equals("Student"))
                     {
+                        progressBar.setVisibility(View.GONE);
                         Intent intent=new Intent(LoginActivity.this,HomeActivity.class);
                         startActivity(intent);
                         Toast.makeText(LoginActivity.this, "Welcome : " + user.getEmail(), Toast.LENGTH_SHORT).show();

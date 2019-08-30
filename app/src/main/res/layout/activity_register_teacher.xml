@@ -10,37 +10,30 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:textAlignment="center"
         android:text="TEACHER PORTAL"
         android:textColor="#fff"
         android:textSize="24sp"
         android:textStyle="italic"/>
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="5dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginHorizontal="20dp"
-        app:cardUseCompatPadding="true"      >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+
             <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:background="@drawable/background">
+                android:layout_marginHorizontal="30dp"
+                android:background="@drawable/button">
                 <EditText
 
                     android:id="@+id/nameteacher"
                     android:background="@android:color/transparent"
                     android:paddingTop="5dp"
+                    android:layout_marginLeft="12dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Name"
+
                     android:textSize="20dp"
                     android:inputType="text"
                     />
@@ -49,7 +42,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:background="@drawable/background">
+                android:layout_marginTop="5dp"
+                android:layout_marginHorizontal="30dp"
+                android:background="@drawable/button">
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -58,6 +53,7 @@
                     android:textSize="20dp"
                     android:background="@android:color/transparent"
                     android:paddingTop="5dp"
+                    android:layout_marginLeft="12dp"
                     android:inputType="textEmailAddress"
                     />
 
@@ -68,12 +64,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:background="@drawable/background">
+                android:layout_marginTop="5dp"
+                android:layout_marginHorizontal="30dp"
+                android:background="@drawable/button">
                 <EditText
 
                     android:id="@+id/pin"
                     android:background="@android:color/transparent"
                     android:paddingTop="5dp"
+                    android:layout_marginLeft="12dp"
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -86,12 +85,15 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:padding="2dp"
-                android:background="@drawable/background"
+                android:background="@drawable/button"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="5dp"
                 android:layout_height="wrap_content">
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Password"
+                    android:layout_marginLeft="12dp"
                     android:background="@android:color/transparent"
                     android:paddingTop="5dp"
                     android:id="@+id/pwteacher"
@@ -103,7 +105,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:background="@drawable/background">
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/button">
                 <EditText
 
                     android:id="@+id/confirmteacher"
@@ -111,20 +115,20 @@
                     android:paddingTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
                     android:hint="Confirm Password"
                     android:textSize="20dp"
                     android:inputType="textPassword"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
         android:text="Signup"
-        android:backgroundTint="#80D8FF"
+        android:background="@drawable/registerbutton"
         android:id="@+id/signupteacher"/>
     <TextView
         android:layout_width="match_parent"
@@ -135,6 +139,12 @@
         android:textAllCaps="false"
         android:textColor="#fff"
         />
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressbar"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"/>
 
 
 </LinearLayout>

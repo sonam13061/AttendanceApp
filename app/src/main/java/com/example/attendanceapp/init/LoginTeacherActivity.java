@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ public class LoginTeacherActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference(Constants.User);
     private EditText uname,pass;
+    ProgressBar progressBar;
     String usertype;
     private FirebaseAuth mAuth;
     public CallbackManager mCallbackManager;
@@ -56,6 +58,7 @@ public class LoginTeacherActivity extends AppCompatActivity {
         login=findViewById(R.id.loginteacher);
         forgot=findViewById(R.id.forgotteacher);
         register=findViewById(R.id.registerteacher);
+        progressBar=findViewById(R.id.progress);
 
     }
 
@@ -88,13 +91,16 @@ public class LoginTeacherActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 if(TextUtils.isEmpty(uname.getText().toString())) {
                     uname.setError("Email address field cannot be empty");
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
 
                 if(TextUtils.isEmpty(pass.getText().toString())){
                     pass.setError("Password field cannot be empty");
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
 
@@ -111,9 +117,9 @@ public class LoginTeacherActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User s=dataSnapshot.getValue(User.class);
-                editor.putString(Constants.NAME, s.getName());
-                editor.putString(Constants.EMAIL,s.getEmail());
-                editor.putString(Constants.USERTYPE, s.getUsertype());
+               // editor.putString(Constants.NAME, s.getName());
+              //  editor.putString(Constants.EMAIL,s.getEmail());
+               // editor.putString(Constants.USERTYPE, s.getUsertype());
               //  editor.putString(Constants.COURSE, s.getCourse());
                 editor.commit();
             }
@@ -137,7 +143,7 @@ public class LoginTeacherActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             // Sign in success, update UI with the signed-in user's information
-
+                                progressBar.setVisibility(View.GONE);
                             //Log.d(TAG, "signInWithEmail:success");
                             if(mAuth.getCurrentUser().isEmailVerified()) {
                                 FirebaseUser user = mAuth.getCurrentUser();
@@ -147,6 +153,7 @@ public class LoginTeacherActivity extends AppCompatActivity {
                                 onAuthsuccess(user);}
                             else{
                                 Toast.makeText(LoginTeacherActivity.this, "Please verify your email", Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
                             }
 
                         } else {
@@ -158,7 +165,7 @@ public class LoginTeacherActivity extends AppCompatActivity {
                             Toast.makeText(LoginTeacherActivity.this, "Email address or password is invalid",
 
                                     Toast.LENGTH_SHORT).show();
-
+                                    progressBar.setVisibility(View.GONE);
 
 
                         }
@@ -209,6 +216,7 @@ public class LoginTeacherActivity extends AppCompatActivity {
 
                        startActivity(intent);
                        finish();
+                       progressBar.setVisibility(View.GONE);
 
                        Toast.makeText(LoginTeacherActivity.this, "Welcome : " + user.getEmail(), Toast.LENGTH_SHORT).show();
 
@@ -217,6 +225,7 @@ public class LoginTeacherActivity extends AppCompatActivity {
                    {
                        Toast.makeText(LoginTeacherActivity.this, "Please Login through Student portal", Toast.LENGTH_SHORT).show();
                        FirebaseAuth.getInstance().signOut();
+                       progressBar.setVisibility(View.GONE);
 
                    }
 

@@ -44,12 +44,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.Menu;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnFragmentInteractionListener {
     TextView name,email;
+    ImageView profilepic;
     FirebaseAuth mAuth;
     FirebaseDatabase database=FirebaseDatabase.getInstance();
     DatabaseReference myRef;
@@ -77,6 +79,7 @@ public class HomeActivity extends AppCompatActivity
         View Headerview=navigationView.getHeaderView(0);
        name=Headerview.findViewById(R.id.name);
        email=Headerview.findViewById(R.id.email);
+       profilepic=Headerview.findViewById(R.id.profile);
        setheader();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -94,6 +97,14 @@ public class HomeActivity extends AppCompatActivity
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String nm= (String) dataSnapshot.child("name").getValue();
                 String em=(String) dataSnapshot.child("email").getValue();
+                String image=(String) dataSnapshot.child("profilepic").getValue();
+                if(image.equals("none")){
+                    profilepic.setImageResource(R.drawable.pic);
+                }
+                else{
+                    profilepic.setImageURI(Uri.parse(image));
+
+                }
                 name.setText(nm);
                 email.setText(em);
 
@@ -124,20 +135,17 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

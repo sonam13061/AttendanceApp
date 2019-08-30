@@ -7,6 +7,25 @@ public class User {
     public String usertype;
     public int pin;
     public String nickname;
+    public String profilepic;
+
+    public String getProfilepic() {
+        return profilepic;
+    }
+
+    public void setProfilepic(String profilepic) {
+        this.profilepic = profilepic;
+    }
+
+    public User(String name, String email, String course, String usertype, int pin, String nickname, String profilepic) {
+        this.name = name;
+        this.email = email;
+        this.course = course;
+        this.usertype = usertype;
+        this.pin = pin;
+        this.nickname = nickname;
+        this.profilepic = profilepic;
+    }
 
     public User(String name, String email, String course, String usertype, int pin, String nickname) {
         this.name = name;
