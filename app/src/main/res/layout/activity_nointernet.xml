@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#1565C0"
+    tools:context=".init.NointernetActivity">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        app:lottie_rawRes="@raw/airplane"
+        app:lottie_autoPlay="false"
+
+        android:id="@+id/lottie"
+        app:lottie_loop="true"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NO INTERNET CONNECTION"
+        android:textSize="24sp"
+        android:gravity="center_horizontal"
+        android:textColor="#000"
+        />
+
+    <Button
+        android:paddingLeft="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Try again"
+        android:textColor="#fff"
+        android:background="@drawable/buttton"
+        android:drawableStart="@drawable/ic_restore_black_24dp"
+        android:id="@+id/retry"
+        android:layout_marginTop="40dp"
+        android:layout_marginHorizontal="30dp"/>
+    <Button
+        android:paddingLeft="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Open Settings"
+        android:layout_marginTop="4dp"
+        android:textColor="#fff"
+        android:background="@drawable/buttton"
+        android:drawableStart="@drawable/ic_settings_applications_black_24dp"
+        android:id="@+id/settings"
+        android:layout_marginHorizontal="30dp"/>
+    <Button
+        android:background="@drawable/buttton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Exit"
+        android:layout_marginTop="4dp"
+        android:textColor="#fff"
+        android:paddingLeft="5dp"
+        android:drawableStart="@drawable/ic_exit_to_app_black_24dp"
+        android:id="@+id/exit"
+        android:layout_marginHorizontal="30dp"/>
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:id="@+id/progress"
+        android:visibility="gone"/>
+
+
+</LinearLayout>
